@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPC Debugger</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="icon">🔌</i> IPC Debugger
+            </div>
+            <button class="mobile-menu-btn">☰</button>
+            <nav id="main-nav">
+                <ul>
+                    <li><a href="#" class="active">Dashboard</a></li>
+                    <li><a href="#">Processes</a></li>
+                    <li><a href="#">Connections</a></li>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Settings</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">Pipes</div>
+                    <div class="card-body">
+                        <p>Debug and monitor unnamed and named pipes for communication between processes.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span>3 Active</span>
+                        <button class="btn">Debug</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Message Queues</div>
+                    <div class="card-body">
+                        <p>Monitor message queues for asynchronous communication between processes.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span>2 Active</span>
+                        <button class="btn">Debug</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Shared Memory</div>
+                    <div class="card-body">
+                        <p>Inspect shared memory segments and semaphores for high-performance IPC.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span>1 Active</span>
+                        <button class="btn">Debug</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Sockets</div>
+                    <div class="card-body">
+                        <p>Debug Unix domain sockets and network sockets for local and remote communication.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span>4 Active</span>
+                        <button class="btn">Debug</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="debug-console">
+                <div class="console-header">
+                    <h2>Debug Console</h2>
+                    <div class="console-tabs">
+                        <button class="console-tab active">Output</button>
+                        <button class="console-tab">Events</button>
+                        <button class="console-tab">Errors</button>
+                    </div>
+                </div>
+                <div class="console-body" id="console-output">
+# IPC Debugger Console
+> Initializing debugger...
+> Scanning for active IPC mechanisms...
+> Found 3 pipe connections
+> Found 2 message queues
+> Found 1 shared memory segment
+> Found 4 socket connections
+> Ready for debugging commands.
+
+</div>
+                <div class="console-input">
+                    <input type="text" placeholder="Enter command..." id="console-input">
+                    <button id="send-command">Send</button>
+                </div>
+            </div>
+            
+            <div class="visualizer">
+                <div class="visualizer-header">
+                    <h2>IPC Visualizer</h2>
+                    <div>
+                        <button class="btn btn-secondary">Zoom In</button>
+                        <button class="btn btn-secondary">Zoom Out</button>
+                        <button class="btn btn-secondary">Reset</button>
+                    </div>
+                </div>
+                <div class="visualizer-body" id="visualizer">
+                    <svg width="100%" height="100%" id="ipc-svg">
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" 
+                                   orient="auto" markerUnits="strokeWidth">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#5e5ce6" />
+                            </marker>
+                        </defs>
+                        
+                        <!-- Process 1 -->
+                        <g class="process" transform="translate(100, 100)">
+                            <circle r="40"></circle>
+                            <text>Process 1</text>
+                        </g>
+                        
+                        <!-- Process 2 -->
+                        <g class="process" transform="translate(300, 100)">
+                            <circle r="40"></circle>
+                            <text>Process 2</text>
+                        </g>
+                        
+                        <!-- Process 3 -->
+                        <g class="process" transform="translate(200, 250)">
+                            <circle r="40"></circle>
+                            <text>Process 3</text>
+                        </g>
+                        
+                        <!-- Connections -->
+                        <path class="channel" d="M140,100 C200,50 200,50 260,100"></path>
+                        <path class="channel" d="M100,140 C50,200 150,200 170,250"></path>
+                        <path class="channel" d="M300,140 C350,200 250,200 230,250"></path>
+                        
+                        <!-- Data packet -->
+                        <circle class="data-packet" cx="200" cy="75" r="8"></circle>
+                    </svg>
+                </div>
+                <div class="visualizer-controls">
+                    <button class="btn" id="start-simulation">Start Simulation</button>
+                    <button class="btn" id="pause-simulation">Pause</button>
+                    <button class="btn" id="step-simulation">Step</button>
+                    <select id="simulation-speed">
+                        <option value="0.5">0.5x Speed</option>
+                        <option value="1" selected>1x Speed</option>
+                        <option value="2">2x Speed</option>
+                        <option value="5">5x Speed</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="settings-panel">
+                <h2>IPC Configuration</h2>
+                <div class="settings-grid">
+                    <div class="form-group">
+                        <label for="process-count">Number of Processes</label>
+                        <input type="number" id="process-count" value="3" min="2" max="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ipc-type">IPC Mechanism</label>
+                        <select id="ipc-type">
+                            <option value="pipe">Pipes</option>
+                            <option value="mq">Message Queues</option>
+                            <option value="shm">Shared Memory</option>
+                            <option value="socket">Sockets</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="buffer-size">Buffer Size (bytes)</label>
+                        <input type="number" id="buffer-size" value="4096" min="64" max="65536">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message-rate">Message Rate (msgs/sec)</label>
+                        <input type="number" id="message-rate" value="10" min="1" max="100">
+                    </div>
+                </div>
+                <button class="btn" id="apply-settings">Apply Settings</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>IPC Debugger</h3>
+                    <p>A powerful tool for debugging and monitoring Inter-Process Communication mechanisms.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API</a></li>
+                        <li><a href="#">GitHub</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Examples</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Community</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2025 IPC Debugger. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
